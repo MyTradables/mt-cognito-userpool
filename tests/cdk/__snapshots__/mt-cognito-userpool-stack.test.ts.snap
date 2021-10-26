@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Stack validation should have a correct stack configuration 1`] = `
+Object {
+  "Outputs": Object {
+    "UserpoolClientId": Object {
+      "Value": Object {
+        "Ref": "mttraderspoolclient2D2D912D",
+      },
+    },
+    "UserpoolId": Object {
+      "Value": Object {
+        "Ref": "mttraderspool7C3F78E0",
+      },
+    },
+  },
+  "Resources": Object {
+    "mtfacebookloginDA10E1C5": Object {
+      "Properties": Object {
+        "AttributeMapping": Object {
+          "email": "email",
+          "family_name": "last_name",
+          "given_name": "first_name",
+          "nickname": "name",
+        },
+        "ProviderDetails": Object {
+          "api_version": "",
+          "authorize_scopes": "public_profile",
+          "client_id": "",
+          "client_secret": "",
+        },
+        "ProviderName": "Facebook",
+        "ProviderType": "Facebook",
+        "UserPoolId": Object {
+          "Ref": "mttraderspool7C3F78E0",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolIdentityProvider",
+    },
+    "mtgoogleloginC7136A5C": Object {
+      "Properties": Object {
+        "AttributeMapping": Object {
+          "email": "email",
+          "family_name": "family_name",
+          "given_name": "given_name",
+          "nickname": "name",
+        },
+        "ProviderDetails": Object {
+          "authorize_scopes": "profile",
+          "client_id": "",
+          "client_secret": "",
+        },
+        "ProviderName": "Google",
+        "ProviderType": "Google",
+        "UserPoolId": Object {
+          "Ref": "mttraderspool7C3F78E0",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolIdentityProvider",
+    },
+    "mttraderspool7C3F78E0": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AdminCreateUserConfig": Object {
+          "AllowAdminCreateUserOnly": false,
+          "InviteMessageTemplate": Object {
+            "EmailMessage": "Dear {username},
+  Thank you for signing up at www.mytradables.com!
+  
+  You can login to your account using:
+  Username: {username}
+  Password: {####}
+  
+  Cheers!,
+  
+  www.mytradables.com",
+            "EmailSubject": "Congratulations with your MyTradables account!",
+          },
+        },
+        "AutoVerifiedAttributes": Array [
+          "email",
+        ],
+        "EmailConfiguration": Object {
+          "From": "mytradables@gmail.com",
+        },
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new myTradables account!",
+        "Policies": Object {
+          "PasswordPolicy": Object {
+            "MinimumLength": 12,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+            "TemporaryPasswordValidityDays": 3,
+          },
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolName": "mt-traders-pool",
+        "VerificationMessageTemplate": Object {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new myTradables account!",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mttraderspoolclient2D2D912D": Object {
+      "Properties": Object {
+        "AccessTokenValidity": 120,
+        "AllowedOAuthFlows": Array [
+          "implicit",
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": Array [
+          "profile",
+          "phone",
+          "email",
+          "openid",
+          "aws.cognito.signin.user.admin",
+        ],
+        "CallbackURLs": Array [
+          "https://example.com",
+        ],
+        "ClientName": "mt-traders-pool-client",
+        "IdTokenValidity": 120,
+        "SupportedIdentityProviders": Array [
+          "Google",
+          "Facebook",
+          "COGNITO",
+        ],
+        "TokenValidityUnits": Object {
+          "AccessToken": "minutes",
+          "IdToken": "minutes",
+        },
+        "UserPoolId": Object {
+          "Ref": "mttraderspool7C3F78E0",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+  },
+}
+`;

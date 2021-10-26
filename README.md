@@ -1,6 +1,6 @@
-# MyTradables: Amazon Web Services Cloud Development Kit Bootstrap
+# MyTradables: Cognito Userpool
 
-This repository contains a AWS CDK template stack for MyTradables internal use.
+This repository contains a AWS CDK Cognito stack for MyTradables internal use.
 
 This template stack is build on top of aws cdk typescript.
 Github actions workflows have been added for ci/cd.
