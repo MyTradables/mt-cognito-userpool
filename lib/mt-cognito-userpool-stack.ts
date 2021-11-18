@@ -1,5 +1,7 @@
+/* eslint-disable max-lines */
 import * as cdk from '@aws-cdk/core';
 import * as cognito from '@aws-cdk/aws-cognito';
+// import * as acm from '@aws-cdk/aws-certificatemanager';
 import { IMtCognitoUserpoolStackProps } from '../bin/stack-environment-types';
 
 class MtCognitoUserpoolStack extends cdk.Stack {
@@ -12,15 +14,25 @@ class MtCognitoUserpoolStack extends cdk.Stack {
     const userPool = new cognito.UserPool(this, 'mt-traders-pool', {
       userPoolName: 'mt-traders-pool',
       selfSignUpEnabled: true,
+      standardAttributes: {
+        email: { required: true },
+        nickname: { required: true },
+        fullname: { required: false },
+        address: { required: false },
+        profilePicture: { required: false },
+      },
+      signInAliases: {
+        email: true,
+        username: true,
+        phone: false,
+        preferredUsername: false,
+      },
       userVerification: {
         emailStyle: cognito.VerificationEmailStyle.CODE,
         emailSubject: props.verificationEmailSubject,
       },
       autoVerify: {
         email: true,
-      },
-      emailSettings: {
-        from: props.verificationEmailSender,
       },
       passwordPolicy: {
         minLength: 12,
@@ -31,7 +43,7 @@ class MtCognitoUserpoolStack extends cdk.Stack {
         tempPasswordValidity: cdk.Duration.days(props.tempPasswordValidityInDays),
       },
       removalPolicy: cdk.RemovalPolicy.RETAIN,
-      accountRecovery: cognito.AccountRecovery.PHONE_AND_EMAIL,
+      accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
       userInvitation: {
         emailSubject: props.invitationEmailSubject,
         emailBody: props.invitationEmailBody,
@@ -45,7 +57,6 @@ class MtCognitoUserpoolStack extends cdk.Stack {
       userPool,
       clientId: props.fbClientId,
       clientSecret: props.fbClientSecret,
-      apiVersion: props.fbApiVersion,
       attributeMapping: {
         nickname: cognito.ProviderAttribute.FACEBOOK_NAME,
         givenName: cognito.ProviderAttribute.FACEBOOK_FIRST_NAME,
@@ -77,6 +88,15 @@ class MtCognitoUserpoolStack extends cdk.Stack {
     const userPoolClient = new cognito.UserPoolClient(this, 'mt-traders-pool-client', {
       userPool,
       userPoolClientName: 'mt-traders-pool-client',
+      oAuth: {
+        flows: {
+          authorizationCodeGrant: true,
+        },
+        callbackUrls: [
+          props.mtUrl,
+          props.mtAccountUrl,
+        ],
+      },
       accessTokenValidity: cdk.Duration.hours(props.accessTokenValidityInHours),
       idTokenValidity: cdk.Duration.hours(props.idTokenValidityinHours),
       supportedIdentityProviders: [
@@ -85,7 +105,37 @@ class MtCognitoUserpoolStack extends cdk.Stack {
         cognito.UserPoolClientIdentityProvider.COGNITO,
       ],
     });
+    // add provides as dependency for client.
+    userPoolClient.node.addDependency(facebookLogin);
+    userPoolClient.node.addDependency(googleLogin);
 
+    // const domainCert = acm.Certificate.fromCertificateArn(this, 'mtCert', props.certArn);
+    // const domain = userPool.addDomain('mytradablesDomain', {
+    //   customDomain: {
+    //     domainName: props.mtUrl,
+    //     certificate: domainCert,
+    //   },
+    // });
+    // domain.signInUrl( userPoolClient, {
+    //   redirectUri: props.mtAccountUrl,
+    // });
+    userPool.addDomain('mtDomainPrefix', {
+      cognitoDomain: {
+        domainPrefix: 'mytradables',
+      },
+    });
+
+    // const cfnUserPool = userPool.node.defaultChild as cognito.CfnUserPool;
+    // cfnUserPool.emailConfiguration = {
+    //   emailSendingAccount: 'DEVELOPER',
+    //   from: props.verificationEmailSender,
+    //   replyToEmailAddress: props.mtInfoEmail,
+    //   sourceArn: '',
+    // };
+
+    /**
+    * Output cognito pool id and client id
+    */
     new cdk.CfnOutput(this, 'UserpoolId', {
       value: userPool.userPoolId,
     });

@@ -24,10 +24,9 @@ Object {
           "nickname": "name",
         },
         "ProviderDetails": Object {
-          "api_version": "",
           "authorize_scopes": "public_profile",
-          "client_id": "",
-          "client_secret": "",
+          "client_id": "799753421023660",
+          "client_secret": "345a86ddc368367628e97af71ccba672",
         },
         "ProviderName": "Facebook",
         "ProviderType": "Facebook",
@@ -47,8 +46,8 @@ Object {
         },
         "ProviderDetails": Object {
           "authorize_scopes": "profile",
-          "client_id": "",
-          "client_secret": "",
+          "client_id": "4260226210-mhu69h406g1l7m55m96umsqcl7l4t08g.apps.googleusercontent.com",
+          "client_secret": "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",
         },
         "ProviderName": "Google",
         "ProviderType": "Google",
@@ -61,6 +60,14 @@ Object {
     "mttraderspool7C3F78E0": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
+        "AccountRecoverySetting": Object {
+          "RecoveryMechanisms": Array [
+            Object {
+              "Name": "verified_email",
+              "Priority": 1,
+            },
+          ],
+        },
         "AdminCreateUserConfig": Object {
           "AllowAdminCreateUserOnly": false,
           "InviteMessageTemplate": Object {
@@ -77,12 +84,12 @@ Object {
             "EmailSubject": "Congratulations with your MyTradables account!",
           },
         },
+        "AliasAttributes": Array [
+          "email",
+        ],
         "AutoVerifiedAttributes": Array [
           "email",
         ],
-        "EmailConfiguration": Object {
-          "From": "mytradables@gmail.com",
-        },
         "EmailVerificationMessage": "The verification code to your new account is {####}",
         "EmailVerificationSubject": "Verify your new myTradables account!",
         "Policies": Object {
@@ -95,6 +102,33 @@ Object {
             "TemporaryPasswordValidityDays": 3,
           },
         },
+        "Schema": Array [
+          Object {
+            "Mutable": true,
+            "Name": "email",
+            "Required": true,
+          },
+          Object {
+            "Mutable": true,
+            "Name": "nickname",
+            "Required": true,
+          },
+          Object {
+            "Mutable": true,
+            "Name": "name",
+            "Required": false,
+          },
+          Object {
+            "Mutable": true,
+            "Name": "address",
+            "Required": false,
+          },
+          Object {
+            "Mutable": true,
+            "Name": "picture",
+            "Required": false,
+          },
+        ],
         "SmsVerificationMessage": "The verification code to your new account is {####}",
         "UserPoolName": "mt-traders-pool",
         "VerificationMessageTemplate": Object {
@@ -108,10 +142,13 @@ Object {
       "UpdateReplacePolicy": "Retain",
     },
     "mttraderspoolclient2D2D912D": Object {
+      "DependsOn": Array [
+        "mtfacebookloginDA10E1C5",
+        "mtgoogleloginC7136A5C",
+      ],
       "Properties": Object {
         "AccessTokenValidity": 120,
         "AllowedOAuthFlows": Array [
-          "implicit",
           "code",
         ],
         "AllowedOAuthFlowsUserPoolClient": true,
@@ -123,7 +160,8 @@ Object {
           "aws.cognito.signin.user.admin",
         ],
         "CallbackURLs": Array [
-          "https://example.com",
+          "https://localhost:3000",
+          "https://localhost:3000",
         ],
         "ClientName": "mt-traders-pool-client",
         "IdTokenValidity": 120,
@@ -141,6 +179,15 @@ Object {
         },
       },
       "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "mttraderspoolmtDomainPrefix822D3FA5": Object {
+      "Properties": Object {
+        "Domain": "mytradables",
+        "UserPoolId": Object {
+          "Ref": "mttraderspool7C3F78E0",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolDomain",
     },
   },
 }

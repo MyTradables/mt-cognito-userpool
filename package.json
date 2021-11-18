@@ -7,7 +7,7 @@
     "private": true,
     "version": "1.0.0",
     "engines": {
-        "node": "~14.6.0",
+        "node": "~16.13.0",
         "npm": "~6.14.11"
     },
     "bin": {
@@ -24,13 +24,14 @@
         "deploy": "npx cdk deploy mt-cognito-userpool --ci --require-approval never --no-asset-metadata"
     },
     "devDependencies": {
-        "@aws-cdk/assert": "^1.129.0",
-        "@aws-cdk/core": "1.129.0",
+        "@aws-cdk/assert": "^1.131.0",
+        "@aws-cdk/core": "1.131.0",
         "@mytradables/mt-bootstrap-tools": "0.0.1",
-        "aws-cdk": "^1.129.0",
+        "aws-cdk": "^1.131.0",
         "source-map-support": "^0.5.20"
     },
     "dependencies": {
-        "@aws-cdk/aws-cognito": "^1.129.0"
+        "@aws-cdk/aws-certificatemanager": "^1.131.0",
+        "@aws-cdk/aws-cognito": "^1.131.0"
     }
 }
